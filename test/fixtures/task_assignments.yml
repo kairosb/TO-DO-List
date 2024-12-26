@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  daily_board: one
+  task: one
+  board_column: one
+  position: 1
+
+two:
+  daily_board: two
+  task: two
+  board_column: two
+  position: 1

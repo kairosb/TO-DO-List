@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  estimate: 1
+  completed: false
+  todo_list: one
+  priority: one
+
+two:
+  title: MyString
+  description: MyText
+  estimate: 1
+  completed: false
+  todo_list: two
+  priority: two
