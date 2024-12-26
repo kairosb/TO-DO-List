@@ -14,4 +14,6 @@ Rails.application.routes.draw do
   resources :daily_boards do
     resources :board_columns, only: %i[index create update destroy]
   end
+
+  devise_for :users
 end
