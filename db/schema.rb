@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_25_193132) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_26_103914) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -30,6 +30,14 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_25_193132) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_daily_boards_on_user_id"
+  end
+
+  create_table "list_boards", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "todo_list_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["todo_list_id"], name: "index_list_boards_on_todo_list_id"
   end
 
   create_table "priorities", force: :cascade do |t|
@@ -82,6 +90,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_25_193132) do
 
   add_foreign_key "board_columns", "daily_boards"
   add_foreign_key "daily_boards", "users"
+  add_foreign_key "list_boards", "todo_lists"
   add_foreign_key "task_assignments", "board_columns"
   add_foreign_key "task_assignments", "daily_boards"
   add_foreign_key "task_assignments", "tasks"

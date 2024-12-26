@@ -1,5 +1,5 @@
 class TaskAssignment < ApplicationRecord
-  belongs_to :daily_board
+  belongs_to :boardable, polymorphic: true
   belongs_to :task
   belongs_to :board_column
 
