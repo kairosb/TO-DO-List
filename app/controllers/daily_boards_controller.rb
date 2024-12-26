@@ -1,9 +1,10 @@
 class DailyBoardsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_daily_board, only: %i[show update destroy]
 
   # GET /daily_boards
   def index
-    @daily_boards = DailyBoard.where(user: current_user)
+    @daily_boards = current_user.daily_boards
     render json: @daily_boards
   end
 
@@ -41,9 +42,11 @@ class DailyBoardsController < ApplicationController
 
   def set_daily_board
     @daily_board = current_user.daily_boards.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Quadro não encontrado" }, status: :not_found
   end
 
   def daily_board_params
-    params.require(:daily_board).permit(:name, :total_estimate)
+    params.require(:daily_board).permit(:name, :total_hours)
   end
 end
