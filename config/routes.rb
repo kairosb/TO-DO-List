@@ -11,4 +11,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  resources :daily_boards do
+    resources :board_columns, only: %i[index create update destroy]
+  end
 end
