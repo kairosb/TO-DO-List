@@ -2,32 +2,35 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  # Autenticação com Devise
+  devise_for :users
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # Daily Boards e colunas associadas
   resources :daily_boards do
     resources :board_columns, only: %i[index create update destroy]
   end
 
-  devise_for :users
-
-  resources :todo_lists
-
+  # Todo Lists e tarefas associadas
   resources :todo_lists do
     resources :tasks
   end
 
+  # Task Assignments para Daily Boards
   resources :daily_boards, only: [] do
-    resources :task_assignments, only: [ :create, :update, :destroy ]
+    resources :task_assignments, only: %i[create update destroy]
   end
 
+  # Task Assignments para List Boards
   resources :list_boards, only: [] do
-    resources :task_assignments, only: [ :create, :update, :destroy ]
+    resources :task_assignments, only: %i[create update destroy]
+  end
+
+  # List Boards e colunas associadas
+  resources :todo_lists, only: [] do
+    resources :list_boards, only: %i[index create show update destroy] do
+      resources :board_columns, only: %i[index create update destroy]
+    end
   end
 end
