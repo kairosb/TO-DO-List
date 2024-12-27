@@ -1,0 +1,2 @@
+module ListBoardsHelper
+end
