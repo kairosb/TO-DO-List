@@ -10,17 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_26_130729) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_26_233438) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "board_columns", force: :cascade do |t|
     t.string "name"
     t.integer "position"
-    t.bigint "daily_board_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["daily_board_id"], name: "index_board_columns_on_daily_board_id"
+    t.string "boardable_type", null: false
+    t.bigint "boardable_id", null: false
+    t.index ["boardable_type", "boardable_id"], name: "index_board_columns_on_boardable"
   end
 
   create_table "daily_boards", force: :cascade do |t|
@@ -93,7 +94,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_26_130729) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "board_columns", "daily_boards"
   add_foreign_key "daily_boards", "users"
   add_foreign_key "list_boards", "todo_lists"
   add_foreign_key "task_assignments", "board_columns"

@@ -42,7 +42,9 @@ class BoardColumnsController < ApplicationController
     elsif params[:list_board_id]
                    ListBoard.find(params[:list_board_id])
     end
+    render json: { error: "Board not found" }, status: :not_found unless @boardable
   end
+
 
   def set_board_column
     @board_column = @boardable.board_columns.find(params[:id])
