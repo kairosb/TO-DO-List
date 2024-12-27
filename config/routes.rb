@@ -22,4 +22,12 @@ Rails.application.routes.draw do
   resources :todo_lists do
     resources :tasks
   end
+
+  resources :daily_boards, only: [] do
+    resources :task_assignments, only: [ :create, :update, :destroy ]
+  end
+
+  resources :list_boards, only: [] do
+    resources :task_assignments, only: [ :create, :update, :destroy ]
+  end
 end
