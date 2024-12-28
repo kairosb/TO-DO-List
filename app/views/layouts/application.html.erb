@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <title><%= content_for(:title) || "To Do List" %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -8,42 +9,46 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%= javascript_importmap_tags %>
+
     <%= yield :head %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%= stylesheet_link_tag :application, "data-turbo-track": "reload" %>
-  </head>
+    <%= stylesheet_link_tag "application", media: "all" %>
+</head>
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-        <a class="navbar-brand" href="/">To Do List</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/todo_lists">My Lists</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/users/sign_out" data-method="delete">Logout</a>
-            </li>
-          </ul>
+<body class="bg-dark text-white">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">To Do List</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link <%= current_page?('/') ? 'active' : '' %>" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= current_page?('/todo_lists') ? 'active' : '' %>" href="/todo_lists">Minhas Listas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users/sign_out" data-method="delete">Sair</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </nav>
 
-    <div class="container mt-4">
-      <%= yield %>
-    </div>
+    <%= yield %>
 
-    <%= javascript_include_tag :application, "data-turbo-track": "reload", defer: true %>
-  </body>
+    <!-- Footer -->
+    <footer class="text-center mt-5 py-3 border-top border-secondary">
+        <p class="mb-0 text-secondary">&copy; <%= Date.current.year %> To Do List. Todos os direitos reservados.</p>
+    </footer>
+</body>
+
 </html>
