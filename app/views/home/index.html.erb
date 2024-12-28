@@ -1,0 +1,10 @@
+<div class="container mt-5">
+  <h1  class="text-center">Bem-vindo, <%= current_user.username || current_user.email %>!</h1>
+  
+  <p class="text-center">Você tem <strong class="badge bg-danger"><%= @pending_tasks_count %></strong> tarefas pendentes hoje.</p>
+
+  <div class="d-flex justify-content-center mt-4">
+    <a href="/todo_lists" class="btn btn-primary me-2">Minhas Listas</a>
+    <a href="/daily_boards/<%= @daily_board&.id || "" %>" class="btn btn-secondary">Meu Quadro Diário</a>
+  </div>
+</div>
