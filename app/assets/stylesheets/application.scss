@@ -8,4 +8,51 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
- @import "bootstrap/scss/bootstrap";
+ @import "bootstrap";
+
+ body {
+    background-color: #121212; 
+    color: #ffffff;           
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .container {
+    background-color: #1c1c1c; 
+    border-radius: 8px;        
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); 
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: #f8f9fa;
+  }
+  
+  p {
+    color: #e4e4e4;
+  }
+  
+  .btn {
+    font-size: 1.2rem;
+    padding: 10px 20px;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #0056b3;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    border-color: #5a6268;
+  }
+  
+  .btn:hover {
+    opacity: 0.9;
+  }
+  
+  .badge {
+    font-size: 1rem;
+    padding: 5px 10px;
+  }
+  

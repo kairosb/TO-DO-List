@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "home/index"
   devise_for :users
 
   resources :todo_lists do
@@ -17,5 +18,6 @@ Rails.application.routes.draw do
     resources :task_assignments, only: %i[create update destroy]
   end
 
-  root "todo_lists#index"
+  root "home#index"
+  get "/home", to: "home#index"
 end
