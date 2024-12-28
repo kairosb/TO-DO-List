@@ -1,6 +1,5 @@
 class ListBoardsController < ApplicationController
   before_action :set_todo_list
-  before_action :set_list_board, only: %i[show update destroy]
 
   # GET /todo_lists/:todo_list_id/list_boards
   def index
@@ -11,6 +10,7 @@ class ListBoardsController < ApplicationController
   # POST /todo_lists/:todo_list_id/list_boards
   def create
     @list_board = @todo_list.list_boards.new(list_board_params)
+
     if @list_board.save
       render json: @list_board, status: :created
     else
@@ -20,11 +20,13 @@ class ListBoardsController < ApplicationController
 
   # GET /todo_lists/:todo_list_id/list_boards/:id
   def show
+    @list_board = @todo_list.list_boards.find(params[:id])
     render json: @list_board
   end
 
-  # PATCH/PUT /todo_lists/:todo_list_id/list_boards/:id
+  # PUT/PATCH /todo_lists/:todo_list_id/list_boards/:id
   def update
+    @list_board = @todo_list.list_boards.find(params[:id])
     if @list_board.update(list_board_params)
       render json: @list_board
     else
@@ -34,6 +36,7 @@ class ListBoardsController < ApplicationController
 
   # DELETE /todo_lists/:todo_list_id/list_boards/:id
   def destroy
+    @list_board = @todo_list.list_boards.find(params[:id])
     @list_board.destroy
     head :no_content
   end
@@ -42,10 +45,6 @@ class ListBoardsController < ApplicationController
 
   def set_todo_list
     @todo_list = TodoList.find(params[:todo_list_id])
-  end
-
-  def set_list_board
-    @list_board = @todo_list.list_boards.find(params[:id])
   end
 
   def list_board_params
