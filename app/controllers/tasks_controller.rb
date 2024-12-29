@@ -42,7 +42,9 @@ class TasksController < ApplicationController
 
   # PUT/PATCH /todo_lists/:todo_list_id/tasks/:id
   def update
-    if @task.update(task_params)
+    update_params = params.require(:task).permit(:title, :description, :estimate, :completed, :priority_id)
+
+    if @task.update(update_params)
       redirect_to todo_list_tasks_path(@todo_list), notice: "Tarefa atualizada com sucesso!"
     else
       render :edit, status: :unprocessable_entity
