@@ -1,0 +1,31 @@
+<div class="container mt-5">
+  <h2 class="text-center py-3 text-white">Detalhes da Tarefa</h2>
+
+  <div class="card bg-dark text-light shadow-sm">
+    <div class="card-header bg-secondary text-white">
+      <h3 class="m-0"><%= @task.title %></h3>
+    </div>
+    <div class="card-body">
+      <p><strong>Descrição:</strong> <%= @task.description.presence || "Sem descrição" %></p>
+      <p><strong>Prioridade:</strong> <%= @task.priority.name %></p>
+      <p><strong>Tempo Estimado:</strong> <%= @task.estimate || "Não especificado" %> horas</p>
+      <p>
+        <strong>Status:</strong>
+        <% if @task.completed %>
+          <span class="badge bg-success">Concluído</span>
+        <% else %>
+          <span class="badge bg-warning text-dark">Pendente</span>
+        <% end %>
+      </p>
+    </div>
+    <div class="card-footer bg-secondary d-flex justify-content-between align-items-center">
+      <div>
+        <%= link_to 'Editar Tarefa', edit_todo_list_task_path(@todo_list, @task), class: 'btn btn-sm btn-outline-light me-2' %>
+        <%= form_with url: todo_list_task_path(@todo_list, @task), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'd-inline' do %>
+          <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+        <% end %>
+      </div>
+      <%= link_to 'Voltar para Tarefas', todo_list_tasks_path(@todo_list), class: 'btn btn-sm btn-outline-light' %>
+    </div>
+  </div>
+</div>
