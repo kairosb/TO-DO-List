@@ -1,0 +1,45 @@
+<div class="container mt-5">
+  <h2 class="text-center py-3 text-white">Quadro: <%= @daily_board.name %></h2>
+
+  <div class="d-flex justify-content-end mb-3">
+    <%= link_to 'Adicionar Coluna', new_daily_board_board_column_path(@daily_board), class: 'btn btn-outline-secondary me-2' %>
+  </div>
+
+  <div class="row g-3">
+    <% @columns.each do |column| %>
+      <div class="col-md-4">
+        <div class="card bg-dark text-light shadow-sm">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><%= column.name %></h5>
+            <%= link_to 'Excluir Coluna', daily_board_board_column_path(@daily_board, column), method: :delete, class: 'btn btn-sm btn-danger', data: { confirm: 'Tem certeza?' } %>
+          </div>
+          <div class="card-body p-2 sortable-column" id="column-<%= column.id %>" data-column-id="<%= column.id %>">
+            <% column.task_assignments.each do |assignment| %>
+              <% task = assignment.task %>
+              <div class="card mb-2 draggable-task shadow-sm" data-task-assignment-id="<%= assignment.id %>">
+                <div class="card-body p-2">
+                  <h5 class="mb-0">
+                    <%= task.title %>
+                    <% if task.completed %>
+                      <span class="badge bg-success ms-2">Concluído</span>
+                    <% else %>
+                      <span class="badge bg-warning text-dark ms-2">Pendente</span>
+                    <% end %>
+                  </h5>
+                  <p class="mb-0 text-muted"><%= task.description.presence || "Sem descrição" %></p>
+                  <p><small>Prioridade: <%= task.priority.name %></small></p>
+                  <div class="d-flex justify-content-end">
+                    <%= link_to 'Editar', edit_todo_list_task_path(task.todo_list, task), class: 'btn btn-sm btn-secondary me-2' %>
+                    <%= form_with url: todo_list_task_path(task.todo_list, task), method: :delete, class: "d-inline" do %>
+                      <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
