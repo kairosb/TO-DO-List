@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   end
 
   resources :daily_boards do
-    resources :board_columns, only: %i[index create update destroy]
-    resources :task_assignments, only: %i[create update destroy]
+    resources :board_columns, only: %i[index new create update destroy]
+    resources :task_assignments, only: %i[new create update destroy]
   end
+  
+  resources :task_assignments, only: [:update]
 end
