@@ -1,4 +1,5 @@
 class ListBoardsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_todo_list
 
   # GET /todo_lists/:todo_list_id/list_boards

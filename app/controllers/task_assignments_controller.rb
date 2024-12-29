@@ -1,4 +1,5 @@
 class TaskAssignmentsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_board_column, only: %i[create]
   before_action :set_task_assignment, only: %i[update destroy]
 

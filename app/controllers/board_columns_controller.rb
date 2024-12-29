@@ -1,4 +1,5 @@
 class BoardColumnsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_boardable
   before_action :set_board_column, only: %i[update destroy]
 
