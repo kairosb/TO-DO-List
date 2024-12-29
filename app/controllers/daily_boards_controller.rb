@@ -12,6 +12,9 @@ class DailyBoardsController < ApplicationController
 
   # GET /daily_boards/:id
   def show
+    @columns = @daily_board.board_columns.includes(:task_assignments)
+    @tasks = Task.joins(:task_assignments)
+                 .where(task_assignments: { daily_board_id: @daily_board.id })
   end
 
   # GET /daily_boards/new
@@ -72,10 +75,15 @@ class DailyBoardsController < ApplicationController
       break if remaining_hours <= 0 
   
       if task.estimate <= remaining_hours
+        board_column = daily_board.board_columns.find_by(name: "To Do")
+        if board_column.nil?
+          board_column = daily_board.board_columns.create!(name: "To Do", position: 1)
+        end
+
         TaskAssignment.create!(
           daily_board_id: daily_board.id,
           task_id: task.id,
-          board_column_id: daily_board.board_columns.find_by(name: "To Do").id,
+          board_column_id: board_column.id,
           position: 0
         )
         remaining_hours -= task.estimate
