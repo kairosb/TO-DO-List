@@ -1,0 +1,27 @@
+<div class="container mt-5">
+  <h2 class="text-center py-3 text-white">Meus Quadros Diários</h2>
+
+  <div class="d-flex justify-content-center mb-3">
+    <%= link_to 'Criar Novo Quadro Diário', new_daily_board_path, class: 'btn btn-primary' %>
+  </div>
+
+  <% if @daily_boards.any? %>
+    <ul class="list-group gap-2">
+      <% @daily_boards.each do |board| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-light">
+          <div>
+            <strong><%= link_to board.name, daily_board_path(board), class: "text-decoration-none text-white" %></strong>
+            <p class="mb-0 text-muted">Estimativa Total: <%= board.total_estimate || "Não especificado" %> horas</p>
+          </div>
+          <div>
+            <%= form_with url: daily_board_path(board), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'd-inline' do %>
+              <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-center text-white">Nenhum quadro criado ainda. Clique em "Criar Novo Quadro Diário" para começar!</p>
+  <% end %>
+</div>
