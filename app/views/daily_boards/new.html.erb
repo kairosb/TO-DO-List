@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <h2 class="text-center py-3 text-white">Criar Novo Quadro Diário</h2>
+
+  <div class="card bg-dark text-light">
+    <div class="card-body">
+      <%= form_with model: @daily_board, local: true do |f| %>
+        <div class="mb-3">
+          <%= f.label :name, 'Nome do Quadro', class: 'form-label' %>
+          <%= f.text_field :name, class: 'form-control', required: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :total_estimate, 'Tempo Total Estimado (em horas)', class: 'form-label' %>
+          <%= f.number_field :total_estimate, class: 'form-control', min: 1, required: true %>
+        </div>
+
+        <div class="d-grid gap-2">
+          <%= f.submit 'Criar Quadro', class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
