@@ -20,7 +20,7 @@ class TasksController < ApplicationController
 
   # GET /todo_lists/:todo_list_id/tasks/:id
   def show
-    render json: @task
+    
   end
 
   # POST /todo_lists/:todo_list_id/tasks
