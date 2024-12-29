@@ -10,7 +10,7 @@
     <ul class="list-group gap-2">
         <% @todo_lists.each do |list| %>
         <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
-            <%= link_to list.name, todo_list_path(list), class: "text-decoration-none text-dark" %>
+            <%= link_to list.name, todo_list_tasks_path(list), class: "text-decoration-none text-dark" %>
             <div>
                 <%= link_to 'Editar', edit_todo_list_path(list), class: 'btn btn-sm btn-secondary me-2' %>
                 <%= form_with url: todo_list_path(list), data: { confirm: 'Tem certeza?' }, method: :delete, class: "d-inline" do %>
