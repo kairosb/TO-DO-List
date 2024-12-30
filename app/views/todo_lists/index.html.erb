@@ -20,8 +20,8 @@
                     <i class="fas fa-edit"></i>
                   <% end %>
 
-                  <%= form_with url: todo_list_path(list), data: { confirm: 'Tem certeza?' }, method: :delete, class: "d-inline" do %>
-                    <button type="submit" class="btn btn-sm btn-danger">
+                  <%= form_with url: todo_list_path(list), method: :delete, class: "d-inline" do %>
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir esta Lista?');">
                       <i class="fas fa-trash"></i>
                     </button>
                   <% end %>

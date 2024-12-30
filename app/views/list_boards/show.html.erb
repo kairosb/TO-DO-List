@@ -41,14 +41,13 @@
                                 <i class="fas fa-edit"></i>
                                 <% end %>
 
-                                <%= form_with url: todo_list_task_path(task.todo_list, task), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'd-inline' do |f| %>
+                                <%= form_with url: todo_list_task_path(task.todo_list, task), method: :delete, class: 'd-inline', local: true do %>
                                 <%= hidden_field_tag :board_type, "list_board" %>
                                 <%= hidden_field_tag :board_id, @todo_list.list_board.id %>
-                                <button type="submit" class="btn btn-sm btn-danger">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?');">
                                     <i class="fas fa-trash"></i>
                                 </button>
                                 <% end %>
-
                             </div>
                         </div>
                     </div>
