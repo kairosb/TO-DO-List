@@ -1,58 +1,61 @@
 <div class="container mt-5">
-  <h2 class="text-center py-3 text-white">Board da Lista: <%= @todo_list.name %></h2>
+    <h2 class="text-center py-3 text-white">Board da Lista: <%= @todo_list.name %></h2>
 
-  <div class="row g-3">
-    <% @columns.each do |column| %>
-      <div class="col-md-4">
-        <div class="card bg-dark text-light shadow-sm">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><%= column.name %></h5>
-          </div>
-          <div class="card-body p-2 sortable-column" id="column-<%= column.id %>" data-column-id="<%= column.id %>">
-            <% column.task_assignments.each do |assignment| %>
-              <% task = assignment.task %>
-              <% priority_class = case task.priority.level
+    <div class="row g-3">
+        <% @columns.each do |column| %>
+        <div class="col-md-4">
+            <div class="card bg-dark text-light shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><%= column.name %></h5>
+                </div>
+                <div class="card-body p-2 sortable-column" id="column-<%= column.id %>" data-column-id="<%= column.id %>">
+                    <% column.task_assignments.each do |assignment| %>
+                    <% task = assignment.task %>
+                    <% priority_class = case task.priority.level
                 when 1 then 'bg-danger text-white' 
                 when 2 then 'bg-warning text-dark' 
                 when 3 then 'bg-success text-white' 
               end %>
 
-              <div class="card mb-2 draggable-task shadow-sm <%= task.due_date&.to_date == Date.current ? 'card-due-date text-white' : '' %>" data-task-assignment-id="<%= assignment.id %>">
-                <div class="card-body p-2">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title text-muted text-truncate text-white">
-                      <%= task.title %>
-                    </h5>
-                    <span class="badge <%= priority_class %>">
-                      <%= task.priority.name %>
-                    </span>
-                  </div>
-                  <p class="card-text text-muted text-truncate text-white">
-                    <%= task.description.presence || "Sem descrição" %>
-                  </p>
-                  <% if task.due_date.present? %>
-                  <p class="text-end text-muted mb-2 text-truncate text-white">
-                    Vence em: <%= l(task.due_date) %>
-                  </p>
-                  <% end %>
+                    <div class="card mb-2 draggable-task shadow-sm <%= task.due_date&.to_date == Date.current ? 'card-due-date text-white' : '' %>" data-task-assignment-id="<%= assignment.id %>">
+                        <div class="card-body p-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title text-muted text-truncate text-white">
+                                    <%= task.title %>
+                                </h5>
+                                <span class="badge <%= priority_class %>">
+                                    <%= task.priority.name %>
+                                </span>
+                            </div>
+                            <p class="card-text text-muted text-truncate text-white">
+                                <%= task.description.presence || "Sem descrição" %>
+                            </p>
+                            <% if task.due_date.present? %>
+                            <p class="text-end text-muted mb-2 text-truncate text-white">
+                                Vence em: <%= l(task.due_date) %>
+                            </p>
+                            <% end %>
 
-                  <div class="d-flex justify-content-between">
-                    <%= link_to edit_todo_list_task_path(task.todo_list, task), class: 'btn btn-sm btn-secondary me-2' do %>
-                      <i class="fas fa-edit"></i>
-                    <% end %>
+                            <div class="d-flex justify-content-between">
+                                <%= link_to edit_todo_list_task_path(task.todo_list, task), class: 'btn btn-sm btn-secondary me-2' do %>
+                                <i class="fas fa-edit"></i>
+                                <% end %>
 
-                    <%= form_with url: todo_list_task_path(task.todo_list, task), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'd-inline' do %>
-                      <button type="submit" class="btn btn-sm btn-danger">
-                        <i class="fas fa-trash"></i>
-                      </button>
+                                <%= form_with url: todo_list_task_path(task.todo_list, task), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'd-inline' do |f| %>
+                                <%= hidden_field_tag :board_type, "list_board" %>
+                                <%= hidden_field_tag :board_id, @todo_list.list_board.id %>
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <% end %>
+
+                            </div>
+                        </div>
+                    </div>
                     <% end %>
-                  </div>
                 </div>
-              </div>
-            <% end %>
-          </div>
+            </div>
         </div>
-      </div>
-    <% end %>
-  </div>
+        <% end %>
+    </div>
 </div>
