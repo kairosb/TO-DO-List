@@ -1,4 +1,6 @@
 class TaskAssignment < ApplicationRecord
+  belongs_to :list_board, optional: true
+  belongs_to :daily_board, optional: true
   belongs_to :task
   belongs_to :board_column
 

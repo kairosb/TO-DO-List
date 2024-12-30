@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_26_233438) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_29_231454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,14 +49,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_26_233438) do
   end
 
   create_table "task_assignments", force: :cascade do |t|
-    t.bigint "daily_board_id", null: false
+    t.bigint "daily_board_id"
     t.bigint "task_id", null: false
     t.bigint "board_column_id", null: false
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "list_board_id"
     t.index ["board_column_id"], name: "index_task_assignments_on_board_column_id"
     t.index ["daily_board_id"], name: "index_task_assignments_on_daily_board_id"
+    t.index ["list_board_id"], name: "index_task_assignments_on_list_board_id"
     t.index ["task_id"], name: "index_task_assignments_on_task_id"
   end
 
@@ -98,6 +100,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_26_233438) do
   add_foreign_key "list_boards", "todo_lists"
   add_foreign_key "task_assignments", "board_columns"
   add_foreign_key "task_assignments", "daily_boards"
+  add_foreign_key "task_assignments", "list_boards"
   add_foreign_key "task_assignments", "tasks"
   add_foreign_key "tasks", "priorities"
   add_foreign_key "tasks", "todo_lists"
