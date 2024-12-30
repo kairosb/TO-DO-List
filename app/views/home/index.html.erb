@@ -1,7 +1,10 @@
 <div class="container mt-5">
-  <h1  class="text-center">Bem-vindo, <%= current_user.username || current_user.email %>!</h1>
+  <h1 class="text-center">Bem-vindo, <%= current_user.username || current_user.email %>!</h1>
   
-  <p class="text-center">Você tem <strong class="badge bg-danger"><%= @pending_tasks_count %></strong> tarefas pendentes hoje.</p>
+  <p class="text-center">
+    Você tem 
+    <%= link_to "#{@pending_tasks_count} tarefas pendentes hoje.", pending_tasks_path, class: "badge bg-danger text-decoration-none" %>
+  </p>
 
   <div class="d-flex justify-content-center mt-4">
     <a href="/todo_lists" class="btn btn-primary me-2">Minhas Listas</a>

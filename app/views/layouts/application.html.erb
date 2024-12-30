@@ -24,7 +24,12 @@
 
 <body class="bg-dark text-white">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary">
-        <div class="container">
+        <div class="container d-flex align-items-center">
+            <% if request.referer.present? %>
+            <button class="btn btn-secondary me-3" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <% end %>
             <a class="navbar-brand fw-bold" href="/">To Do List</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -40,7 +45,7 @@
                     </li>
                     <li class="nav-item">
                         <%= form_with url: destroy_user_session_path, method: :delete, class: "d-inline" do %>
-                        <button type="submit" class="nav-link text-danger border-0 bg-transparent ">Sair</button>
+                        <button type="submit" class="nav-link text-danger border-0 bg-transparent">Sair</button>
                         <% end %>
                     </li>
                     <% else %>
@@ -48,7 +53,6 @@
                         <a class="nav-link <%= current_page?('/users/sign_in') ? 'active' : '' %>" href="/users/sign_in">Entrar</a>
                     </li>
                     <% end %>
-
                 </ul>
             </div>
         </div>
