@@ -1,33 +1,40 @@
-<h2 class="text-center py-3">Criar Conta</h2>
+<section class="vh-100">
+  <div class="container py-5 h-100">
+    <div class="row d-flex align-items-center justify-content-center h-100">
+      <div class="col-md-8 col-lg-7 col-xl-6">
+        <%= image_tag 'register-icon.svg', class: 'img-fluid', alt: 'Register illustration' %>
+      </div>
+      <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+        <%= form_with model: resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation" } do |f| %>
+          <div class="form-outline mb-4">
+            <%= f.label :username, "Nome de Usuário", class: "form-label text-white" %>
+            <%= f.text_field :username, autofocus: true, placeholder: "Digite seu nome de usuário", class: "form-control form-control-lg login-field", required: true %>
+          </div>
 
-<div class="container">
-  <%= form_with model: resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation" } do |f| %>
-    <div class="mb-3">
-      <%= f.label :username, class: "form-label" %>
-      <%= f.text_field :username, autofocus: true, placeholder: "Digite seu nome de usuário", class: "form-control", required: true %>
+          <div class="form-outline mb-4">
+            <%= f.label :email, "Email", class: "form-label text-white" %>
+            <%= f.email_field :email, placeholder: "Digite seu email", autocomplete: "email", class: "form-control form-control-lg login-field", required: true %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <%= f.label :password, "Senha", class: "form-label text-white" %>
+            <%= f.password_field :password, placeholder: "Digite sua senha", autocomplete: "new-password", class: "form-control form-control-lg login-field", required: true %>
+          </div>
+
+          <div class="form-outline mb-4">
+            <%= f.label :password_confirmation, "Confirme sua Senha", class: "form-label text-white" %>
+            <%= f.password_field :password_confirmation, placeholder: "Confirme sua senha", autocomplete: "new-password", class: "form-control form-control-lg login-field", required: true %>
+          </div>
+
+          <div class="d-grid gap-2">
+            <%= f.submit "Cadastrar", class: "btn btn-primary btn-lg btn-block" %>
+          </div>
+        <% end %>
+
+        <div class="mt-3 text-center">
+          <p>Já tem uma conta? <%= link_to "Entrar", new_session_path(resource_name), class: "text-decoration-none text-primary" %></p>
+        </div>
+      </div>
     </div>
-
-    <div class="mb-3">
-      <%= f.label :email, class: "form-label" %>
-      <%= f.email_field :email, placeholder: "Digite seu email", autocomplete: "email", class: "form-control", required: true %>
-    </div>
-
-    <div class="mb-3">
-      <%= f.label :password, class: "form-label" %>
-      <%= f.password_field :password, placeholder: "Digite sua senha", autocomplete: "new-password", class: "form-control", required: true %>
-    </div>
-
-    <div class="mb-3">
-      <%= f.label :password_confirmation, "Confirme sua senha", class: "form-label" %>
-      <%= f.password_field :password_confirmation, placeholder: "Confirme sua senha", autocomplete: "new-password", class: "form-control", required: true %>
-    </div>
-
-    <div class="d-grid gap-2">
-      <%= f.submit "Registrar", class: "btn btn-primary btn-block" %>
-    </div>
-  <% end %>
-
-  <div class="mt-3 text-center">
-    <p>Já tem uma conta? <%= link_to "Entrar", new_session_path(resource_name), class: "text-primary" %></p>
   </div>
-</div>
+</section>
