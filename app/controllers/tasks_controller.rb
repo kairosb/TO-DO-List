@@ -33,8 +33,6 @@ class TasksController < ApplicationController
     end
   end
 
-
-
   # PUT/PATCH /todo_lists/:todo_list_id/tasks/:id
   def update
     update_params = params.require(:task).permit(:title, :description, :estimate, :completed, :priority_id)
@@ -57,7 +55,6 @@ class TasksController < ApplicationController
     redirect_to todo_list_tasks_path(@todo_list), alert: "Tarefa não encontrada na lista."
   end
 
-
   private
 
   def set_todo_list
@@ -69,6 +66,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :estimate, :completed, :priority_id)
+    params.require(:task).permit(:title, :description, :estimate, :completed, :priority_id, :due_date)
   end
 end

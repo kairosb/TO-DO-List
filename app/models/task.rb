@@ -5,6 +5,7 @@ class Task < ApplicationRecord
 
   validates :title, :estimate, presence: true
   validates :estimate, numericality: { greater_than: 0 }
+  validates :due_date, comparison: { greater_than_or_equal_to: Date.today }, allow_nil: true
 
   after_create :add_to_list_board
 
