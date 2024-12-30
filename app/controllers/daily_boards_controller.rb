@@ -81,7 +81,7 @@ class DailyBoardsController < ApplicationController
         end
 
         TaskAssignment.create!(
-          boardable: daily_board.id,
+          boardable: daily_board,
           task_id: task.id,
           board_column_id: board_column.id,
           position: 0

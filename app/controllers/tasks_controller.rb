@@ -1,11 +1,19 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_todo_list
+  before_action :set_todo_list, except: [ :pending ]
   before_action :set_task, only: %i[show edit update destroy]
 
   # GET /todo_lists/:todo_list_id/tasks
   def index
     @tasks = @todo_list.tasks
+  end
+
+  def pending
+    @tasks = Task.joins(:todo_list)
+                 .where(completed: false, todo_lists: { user_id: current_user.id })
+                 .order(:due_date)
+
+    render "pending"
   end
 
   # GET /todo_lists/:todo_list_id/tasks/:id/edit
