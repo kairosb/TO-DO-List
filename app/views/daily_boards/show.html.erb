@@ -1,37 +1,51 @@
 <div class="container mt-5">
   <h2 class="text-center py-3 text-white">Quadro: <%= @daily_board.name %></h2>
-
-  <div class="d-flex justify-content-end mb-3">
-    <%= link_to 'Adicionar Coluna', new_daily_board_board_column_path(@daily_board), class: 'btn btn-outline-secondary me-2' %>
+  <div class="container mt-3 justify-content-end d-flex">
+    <%= link_to 'Voltar para os Quadros Diários', daily_boards_path, class: 'btn btn-secondary' %>
   </div>
-
   <div class="row g-3">
     <% @columns.each do |column| %>
       <div class="col-md-4">
         <div class="card bg-dark text-light shadow-sm">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><%= column.name %></h5>
-            <%= link_to 'Excluir Coluna', daily_board_board_column_path(@daily_board, column), method: :delete, class: 'btn btn-sm btn-danger', data: { confirm: 'Tem certeza?' } %>
           </div>
           <div class="card-body p-2 sortable-column" id="column-<%= column.id %>" data-column-id="<%= column.id %>">
             <% column.task_assignments.each do |assignment| %>
               <% task = assignment.task %>
-              <div class="card mb-2 draggable-task shadow-sm" data-task-assignment-id="<%= assignment.id %>">
+              <% priority_class = case task.priority.level
+                  when 1 then 'bg-danger text-white' 
+                  when 2 then 'bg-warning text-dark' 
+                  when 3 then 'bg-success text-white' 
+                end %>
+              <div class="card mb-2 draggable-task shadow-sm <%= task.due_date.present? && task.due_date&.to_date <= Date.current ? 'card-due-date text-white' : '' %>" data-task-assignment-id="<%= assignment.id %>">
                 <div class="card-body p-2">
-                  <h5 class="mb-0">
-                    <%= task.title %>
-                    <% if task.completed %>
-                      <span class="badge bg-success ms-2">Concluído</span>
-                    <% else %>
-                      <span class="badge bg-warning text-dark ms-2">Pendente</span>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="card-title text-truncate text-white mb-0">
+                      <%= task.title %>
+                    </h5>
+                    <span class="badge <%= priority_class %>">
+                      <%= task.priority.name %>
+                    </span>
+                  </div>
+                  <p class="card-text text-truncate text-white mb-1">
+                    <%= task.description.presence || "Sem descrição" %>
+                  </p>
+                  <% if task.due_date.present? %>
+                    <p class="text-muted small mb-2">
+                      <i class="fas fa-calendar-alt"></i> Vence em: <%= l(task.due_date) %>
+                    </p>
+                  <% end %>
+                  <div class="d-flex justify-content-between">
+                    <%= link_to edit_todo_list_task_path(task.todo_list, task), class: 'btn btn-sm btn-secondary me-2' do %>
+                      <i class="fas fa-edit"></i>
                     <% end %>
-                  </h5>
-                  <p class="mb-0 text-muted"><%= task.description.presence || "Sem descrição" %></p>
-                  <p><small>Prioridade: <%= task.priority.name %></small></p>
-                  <div class="d-flex justify-content-end">
-                    <%= link_to 'Editar', edit_todo_list_task_path(task.todo_list, task), class: 'btn btn-sm btn-secondary me-2' %>
-                    <%= form_with url: todo_list_task_path(task.todo_list, task), method: :delete, class: "d-inline" do %>
-                      <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                    <%= form_with url: todo_list_task_path(task.todo_list, task), method: :delete, class: 'd-inline', local: true do %>
+                      <%= hidden_field_tag :board_type, "daily_board" %>
+                      <%= hidden_field_tag :board_id, @daily_board.id %>
+                      <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?');">
+                        <i class="fas fa-trash"></i>
+                      </button>
                     <% end %>
                   </div>
                 </div>

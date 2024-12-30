@@ -6,21 +6,28 @@
   </div>
 
   <% if @daily_boards.any? %>
-    <ul class="list-group gap-2">
+    <div class="list-group">
       <% @daily_boards.each do |board| %>
-        <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-light">
-          <div>
-            <strong><%= link_to board.name, daily_board_path(board), class: "text-decoration-none text-white" %></strong>
-            <p class="mb-0 text-muted">Estimativa Total: <%= board.total_estimate || "Não especificado" %> horas</p>
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-calendar-alt me-3 text-white" style="font-size: 2rem;"></i>
+
+            <div>
+              <%= link_to board.name, daily_board_path(board), class: "text-decoration-none text-white fw-bold" %>
+              <p class="mb-0 text-white">Estimativa: <%= board.total_estimate || "Não especificado" %> horas</p>
+            </div>
           </div>
+
           <div>
             <%= form_with url: daily_board_path(board), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'd-inline' do %>
-              <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+              <button type="submit" class="btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i>
+              </button>
             <% end %>
           </div>
-        </li>
+        </div>
       <% end %>
-    </ul>
+    </div>
   <% else %>
     <p class="text-center text-white">Nenhum quadro criado ainda. Clique em "Criar Novo Quadro Diário" para começar!</p>
   <% end %>

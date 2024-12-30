@@ -1,11 +1,19 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_todo_list
+  before_action :set_todo_list, except: [ :pending ]
   before_action :set_task, only: %i[show edit update destroy]
 
   # GET /todo_lists/:todo_list_id/tasks
   def index
     @tasks = @todo_list.tasks
+  end
+
+  def pending
+    @tasks = Task.joins(:todo_list)
+                 .where(completed: false, todo_lists: { user_id: current_user.id })
+                 .order(:due_date)
+
+    render "pending"
   end
 
   # GET /todo_lists/:todo_list_id/tasks/:id/edit
@@ -44,16 +52,23 @@ class TasksController < ApplicationController
     end
   end
 
-  # DELETE /todo_lists/:todo_list_id/tasks/:id
-  def destroy
-    if @task.destroy
-      redirect_to todo_list_tasks_path(@todo_list), notice: "Tarefa removida com sucesso!"
+# DELETE /todo_lists/:todo_list_id/tasks/:id
+def destroy
+  if @task.destroy
+    if params[:board_type] == "daily_board" && params[:board_id].present?
+      redirect_to daily_board_path(params[:board_id]), notice: "Tarefa removida com sucesso do Daily Board!"
+    elsif params[:board_type] == "list_board" && params[:board_id].present?
+      redirect_to todo_list_list_board_path(@todo_list), notice: "Tarefa removida com sucesso do List Board!"
     else
-      redirect_to todo_list_tasks_path(@todo_list), alert: "Erro ao remover a tarefa."
+      redirect_to todo_list_tasks_path(@todo_list), notice: "Tarefa removida com sucesso!"
     end
-  rescue ActiveRecord::RecordNotFound
-    redirect_to todo_list_tasks_path(@todo_list), alert: "Tarefa não encontrada na lista."
+  else
+    redirect_to todo_list_tasks_path(@todo_list), alert: "Erro ao remover a tarefa."
   end
+rescue ActiveRecord::RecordNotFound
+  redirect_to todo_list_tasks_path(@todo_list), alert: "Tarefa não encontrada na lista."
+end
+
 
   private
 

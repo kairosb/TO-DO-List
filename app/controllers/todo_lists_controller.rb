@@ -65,6 +65,6 @@ end
   end
 
   def todo_list_params
-    params.require(:todo_list).permit(:name)
+    params.require(:todo_list).permit(:name, :icon)
   end
 end
