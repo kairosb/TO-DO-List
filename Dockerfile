@@ -14,8 +14,8 @@ RUN apt-get update -qq && \
     libjemalloc2 \
     libvips \
     postgresql-client \
-    nodejs && \  # Instala Node.js como runtime JavaScript
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    nodejs && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Set production environment variables
 ENV RAILS_ENV="production" \
@@ -33,19 +33,15 @@ RUN apt-get update -qq && \
     git \
     libpq-dev \
     pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Copy gem files and install dependencies
 COPY Gemfile Gemfile.lock ./ 
 RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
 # Copy application code
 COPY . .
-
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
 
 # Adjust binfiles to be executable on Linux
 RUN chmod +x bin/* && \
