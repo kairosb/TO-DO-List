@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_todo_list, except: [ :pending ]
+  before_action :set_todo_list, except: [ :pending, :search ]
   before_action :set_task, only: %i[show edit update destroy]
 
   # GET /todo_lists/:todo_list_id/tasks
@@ -52,6 +52,15 @@ class TasksController < ApplicationController
     end
   end
 
+  def search
+    query = params[:query]
+    @tasks = Task.joins(:todo_list)
+                 .where(todo_lists: { user_id: current_user.id })
+                 .where("tasks.title ILIKE ? OR tasks.description ILIKE ?", "%#{query}%", "%#{query}%")
+
+    render :search_results
+  end
+
 # DELETE /todo_lists/:todo_list_id/tasks/:id
 def destroy
   if @task.destroy
@@ -68,7 +77,6 @@ def destroy
 rescue ActiveRecord::RecordNotFound
   redirect_to todo_list_tasks_path(@todo_list), alert: "Tarefa não encontrada na lista."
 end
-
 
   private
 

@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get "/pending_tasks", to: "tasks#pending", as: :pending_tasks
 
+  get "/search", to: "tasks#search"
+
   resources :todo_lists do
     resources :tasks, only: %i[index new edit create show update destroy]
     resource :list_board, only: %i[show create update destroy] do
