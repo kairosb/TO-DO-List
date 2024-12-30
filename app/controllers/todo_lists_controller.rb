@@ -41,11 +41,20 @@ class TodoListsController < ApplicationController
     end
   end
 
-  # DELETE /todo_lists/:id
-  def destroy
-    @todo_list.destroy
-    redirect_to todo_lists_path, notice: "Lista removida com sucesso!"
+# DELETE /todo_lists/:id
+def destroy
+  list_board = @todo_list.list_board
+
+  if list_board
+    list_board.board_columns.each do |column|
+      column.task_assignments.destroy_all
+    end
+    list_board.destroy
   end
+
+  @todo_list.destroy
+  redirect_to todo_lists_path, notice: "Lista removida com sucesso!"
+end
 
   private
 
