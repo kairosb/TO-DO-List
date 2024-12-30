@@ -1,7 +1,5 @@
 # syntax=docker/dockerfile:1
 
-# This Dockerfile is designed for production use with Kamal or standalone deployments.
-
 # Define the Ruby version (ensure it matches your .ruby-version)
 ARG RUBY_VERSION=3.3.6
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
@@ -15,7 +13,8 @@ RUN apt-get update -qq && \
     curl \
     libjemalloc2 \
     libvips \
-    postgresql-client && \
+    postgresql-client \
+    nodejs && \  # Instala Node.js como runtime JavaScript
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment variables
@@ -54,7 +53,7 @@ RUN chmod +x bin/* && \
     sed -i 's/ruby\.exe$/ruby/' bin/*
 
 # Precompiling assets for production with a dummy secret key
-RUN SECRET_KEY_BASE=DUMMY ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE=DUMMY bundle exec rake assets:precompile
 
 # Final stage: runtime image
 FROM base
