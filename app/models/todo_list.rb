@@ -7,14 +7,21 @@ class TodoList < ApplicationRecord
 
   after_create :create_list_board_with_columns
 
+  before_destroy :cleanup_task_assignments
+
   private
 
   def create_list_board_with_columns
     list_board = self.create_list_board!(name: "#{self.name} Board")
 
-    # Criar colunas padrão
-    ["To Do", "In Progress", "Done"].each_with_index do |name, index|
+    [ "To Do", "In Progress", "Done" ].each_with_index do |name, index|
       list_board.board_columns.create!(name: name, position: index)
+    end
+  end
+
+  def cleanup_task_assignments
+    tasks.each do |task|
+      task.task_assignments.destroy_all
     end
   end
 end
