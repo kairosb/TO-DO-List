@@ -18,18 +18,17 @@ class TaskAssignmentsController < ApplicationController
 
   def update
     if @task_assignment.update(task_assignment_params)
-      if @task_assignment.daily_board
-        daily_board = @task_assignment.daily_board
-        last_column = daily_board.board_columns.order(:position).last
+      boardable = @task_assignment.board_column.boardable
 
-        if @task_assignment.board_column == last_column
-          @task_assignment.task.update(completed: true)
-        else
-          @task_assignment.task.update(completed: false)
-        end
+      last_column = boardable.board_columns.order(:position).last
+
+      if @task_assignment.board_column == last_column
+        @task_assignment.task.update!(completed: true)
+      else
+        @task_assignment.task.update!(completed: false)
       end
 
-      head :no_content
+        render json: { status: "success", completed: @task_assignment.task.completed }
     else
       render json: { errors: @task_assignment.errors.full_messages }, status: :unprocessable_entity
     end
