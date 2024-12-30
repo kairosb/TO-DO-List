@@ -5,6 +5,14 @@ class TodoList < ApplicationRecord
 
   validates :name, presence: true
 
+  validates :icon, inclusion: { in: [
+    "icon-tasks.svg",
+    "icon-calendar.svg",
+    "icon-goals.svg",
+    "icon-shopping.svg",
+    "icon-home.svg"
+  ], allow_blank: true }
+
   after_create :create_list_board_with_columns
 
   before_destroy :cleanup_task_assignments

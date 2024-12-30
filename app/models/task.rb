@@ -5,9 +5,9 @@ class Task < ApplicationRecord
 
   validates :title, :estimate, presence: true
   validates :estimate, numericality: { greater_than: 0 }
-  validates :due_date, comparison: { greater_than_or_equal_to: Date.today }, allow_nil: true
 
   after_create :add_to_list_board
+  after_update :update_board_column_if_completed_changed
 
   private
 
@@ -15,14 +15,24 @@ class Task < ApplicationRecord
     list_board = self.todo_list.list_board
     return unless list_board
 
-    to_do_column = list_board.board_columns.find_by(name: "To Do")
-    return unless to_do_column
+    column = completed ? list_board.board_columns.order(:position).last : list_board.board_columns.find_by(name: "To Do")
+    return unless column
 
     TaskAssignment.create!(
       task_id: self.id,
-      board_column_id: to_do_column.id,
+      board_column_id: column.id,
       boardable: list_board,
       position: 0
     )
+  end
+
+  def update_board_column_if_completed_changed
+    return unless saved_change_to_completed?
+
+    assignment = task_assignments.find_by(boardable: todo_list.list_board)
+    return unless assignment
+
+    new_column = completed ? assignment.boardable.board_columns.order(:position).last : assignment.boardable.board_columns.find_by(name: "To Do")
+    assignment.update!(board_column_id: new_column.id) if new_column
   end
 end
