@@ -20,7 +20,6 @@ class TasksController < ApplicationController
 
   # GET /todo_lists/:todo_list_id/tasks/:id
   def show
-    
   end
 
   # POST /todo_lists/:todo_list_id/tasks
@@ -28,16 +27,12 @@ class TasksController < ApplicationController
     @task = @todo_list.tasks.new(task_params)
 
     if @task.save
-      if @task.todo_list_id == @todo_list.id
-        redirect_to todo_list_tasks_path(@todo_list), notice: "Tarefa criada com sucesso!"
-      else
-        @task.destroy
-        redirect_to todo_list_tasks_path(@todo_list), alert: "Erro ao associar a tarefa à lista correta."
-      end
+      redirect_to todo_list_tasks_path(@todo_list), notice: "Tarefa criada com sucesso!"
     else
       render :new, status: :unprocessable_entity
     end
   end
+
 
 
   # PUT/PATCH /todo_lists/:todo_list_id/tasks/:id

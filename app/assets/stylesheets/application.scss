@@ -82,3 +82,44 @@
 .login-field::-ms-input-placeholder {
   color: #aaaaaa !important;
 }
+
+.card {
+  background-color: #1c1c1c; /* Fundo escuro */
+  border: none; /* Remove borda branca */
+  color: #ffffff; /* Texto branco */
+  border-radius: 10px; /* Bordas arredondadas */
+}
+
+.card-title a {
+  color: #ffffff; /* Cor do link no título */
+}
+
+.card-title a:hover {
+  color: #007bff; /* Cor de hover no link */
+}
+
+.card .btn-secondary {
+  background-color: #6c757d; /* Cinza do botão Editar */
+  border: none;
+}
+
+.card .btn-secondary:hover {
+  background-color: #5a6268; /* Hover do botão Editar */
+}
+
+.card .btn-danger:hover {
+  background-color: #d9534f; /* Hover do botão Excluir */
+}
+
+
+.btn .fas {
+  font-size: 1rem; /* Tamanho dos ícones */
+}
+
+.btn-secondary .fas {
+  color: #ffffff; /* Cor do ícone no botão Editar */
+}
+
+.btn-danger .fas {
+  color: #ffffff; /* Cor do ícone no botão Excluir */
+}

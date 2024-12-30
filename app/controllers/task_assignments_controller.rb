@@ -5,7 +5,9 @@ class TaskAssignmentsController < ApplicationController
 
   # POST /task_assignments
   def create
-    @task_assignment = @board_column.task_assignments.new(task_assignment_params)
+    @task_assignment = TaskAssignment.new(task_assignment_params)
+    @task_assignment.boardable = @board_column.boardable
+    @task_assignment.board_column = @board_column
 
     if @task_assignment.save
       render json: @task_assignment, status: :created
@@ -16,22 +18,22 @@ class TaskAssignmentsController < ApplicationController
 
   def update
     if @task_assignment.update(task_assignment_params)
-      daily_board = @task_assignment.board_column.boardable
-  
-      last_column = daily_board.board_columns.order(:position).last
-  
-      if @task_assignment.board_column == last_column
-        @task_assignment.task.update(completed: true)
-      else
-        @task_assignment.task.update(completed: false)
+      if @task_assignment.daily_board
+        daily_board = @task_assignment.daily_board
+        last_column = daily_board.board_columns.order(:position).last
+
+        if @task_assignment.board_column == last_column
+          @task_assignment.task.update(completed: true)
+        else
+          @task_assignment.task.update(completed: false)
+        end
       end
-  
+
       head :no_content
     else
       render json: { errors: @task_assignment.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
 
   # DELETE /task_assignments/:id
   def destroy

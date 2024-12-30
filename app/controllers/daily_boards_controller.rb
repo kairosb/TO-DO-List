@@ -22,24 +22,24 @@ class DailyBoardsController < ApplicationController
     @daily_board = DailyBoard.new
   end
 
-   # POST /daily_boards
-   def create
-    @daily_board = current_user.daily_boards.new(daily_board_params)
-  
+  # POST /daily_boards
+  def create
+  @daily_board = current_user.daily_boards.new(daily_board_params)
+
     if @daily_board.save
 
       create_default_columns(@daily_board)
 
       tasks = Task.where(todo_list: current_user.todo_lists, completed: false)
                   .order("priority_id ASC, estimate ASC")
-  
+
       allocate_tasks_to_daily_board(@daily_board, tasks)
       redirect_to daily_boards_path, notice: "Quadro diário criado com sucesso!"
     else
       render :new, status: :unprocessable_entity
     end
   end
-  
+
 
   # PATCH/PUT /daily_boards/:id
   def update
@@ -50,8 +50,8 @@ class DailyBoardsController < ApplicationController
     end
   end
 
-   # DELETE /daily_boards/:id
-   def destroy
+  # DELETE /daily_boards/:id
+  def destroy
     @daily_board.destroy
     redirect_to daily_boards_path, notice: "Quadro diário excluído com sucesso!"
   end
@@ -70,10 +70,10 @@ class DailyBoardsController < ApplicationController
 
   def allocate_tasks_to_daily_board(daily_board, tasks)
     remaining_hours = daily_board.total_estimate
-  
+
     tasks.each do |task|
-      break if remaining_hours <= 0 
-  
+      break if remaining_hours <= 0
+
       if task.estimate <= remaining_hours
         board_column = daily_board.board_columns.find_by(name: "To Do")
         if board_column.nil?
@@ -81,7 +81,7 @@ class DailyBoardsController < ApplicationController
         end
 
         TaskAssignment.create!(
-          daily_board_id: daily_board.id,
+          boardable: daily_board.id,
           task_id: task.id,
           board_column_id: board_column.id,
           position: 0
@@ -92,7 +92,7 @@ class DailyBoardsController < ApplicationController
   end
 
   def create_default_columns(daily_board)
-    default_columns = ["To Do", "In Progress", "Done"]
+    default_columns = [ "To Do", "In Progress", "Done" ]
     default_columns.each_with_index do |column_name, index|
       daily_board.board_columns.create!(
         name: column_name,
@@ -100,5 +100,4 @@ class DailyBoardsController < ApplicationController
       )
     end
   end
-
 end

@@ -20,9 +20,8 @@ class Task < ApplicationRecord
     TaskAssignment.create!(
       task_id: self.id,
       board_column_id: to_do_column.id,
-      list_board_id: list_board.id,
-      position: 0,
-      daily_board_id: nil
+      boardable: list_board,
+      position: 0
     )
   end
 end
