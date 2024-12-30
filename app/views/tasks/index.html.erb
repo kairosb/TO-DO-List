@@ -4,6 +4,7 @@
     <div class="d-flex justify-content-center mb-3">
         <%= link_to 'Adicionar Nova Tarefa', new_todo_list_task_path(@todo_list), class: 'btn btn-primary' %>
         <%= link_to 'Voltar às Listas', todo_lists_path, class: 'btn btn-secondary ms-2' %>
+        <%= link_to 'Ver Board', todo_list_list_board_path(@todo_list), class: 'btn btn-primary' %>
     </div>
 
     <% if @tasks.any? %>
