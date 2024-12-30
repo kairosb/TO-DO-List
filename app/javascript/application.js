@@ -3,13 +3,13 @@ import "bootstrap";
 import Sortable from "sortablejs";
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".sortable-column").forEach(column => {
+  document.querySelectorAll(".sortable-column").forEach((column) => {
     new Sortable(column, {
       group: "shared",
       animation: 150,
       onEnd: function (evt) {
         const taskAssignmentId = evt.item.dataset.taskAssignmentId;
-        const newColumnId = evt.to.dataset.columnId; 
+        const newColumnId = evt.to.dataset.columnId;
 
         if (!taskAssignmentId || !newColumnId) {
           alert("Erro ao obter informações da tarefa ou coluna.");
@@ -24,11 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           body: JSON.stringify({ board_column_id: newColumnId }),
         })
-          .then(response => {
-            if (!response.ok) {
-              alert("Erro ao mover a tarefa.");
-            } else {
+          .then((response) => {
+            if (response.ok) {
               window.location.reload();
+            } else {
+              alert("Erro ao mover a tarefa.");
             }
           })
           .catch(() => {
