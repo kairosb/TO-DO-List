@@ -84,42 +84,51 @@
 }
 
 .card {
-  background-color: #1c1c1c; /* Fundo escuro */
-  border: none; /* Remove borda branca */
-  color: #ffffff; /* Texto branco */
-  border-radius: 10px; /* Bordas arredondadas */
+  background-color: #1c1c1c; 
+  border: none; 
+  color: #ffffff; 
+  border-radius: 10px;
 }
 
 .card-title a {
-  color: #ffffff; /* Cor do link no título */
+  color: #ffffff; 
 }
 
 .card-title a:hover {
-  color: #007bff; /* Cor de hover no link */
+  color: #007bff; 
 }
 
 .card .btn-secondary {
-  background-color: #6c757d; /* Cinza do botão Editar */
+  background-color: #6c757d; 
   border: none;
 }
 
 .card .btn-secondary:hover {
-  background-color: #5a6268; /* Hover do botão Editar */
+  background-color: #5a6268; 
 }
 
 .card .btn-danger:hover {
-  background-color: #d9534f; /* Hover do botão Excluir */
+  background-color: #d9534f;
 }
 
 
 .btn .fas {
-  font-size: 1rem; /* Tamanho dos ícones */
+  font-size: 1rem; 
 }
 
 .btn-secondary .fas {
-  color: #ffffff; /* Cor do ícone no botão Editar */
+  color: #ffffff; 
 }
 
 .btn-danger .fas {
-  color: #ffffff; /* Cor do ícone no botão Excluir */
+  color: #ffffff;
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+.card-due-date {
+  border: 2px solid #dc3545;
+  color: #ffffff !important; 
 }
