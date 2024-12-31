@@ -4,10 +4,10 @@
 ARG RUBY_VERSION=3.3.6
 FROM ruby:$RUBY_VERSION-slim AS base
 
-# Define the working directory for the Rails application
+# Define o diretório de trabalho
 WORKDIR /rails
 
-# Install essential runtime packages
+# Instala pacotes essenciais para runtime
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     curl \
@@ -18,16 +18,16 @@ RUN apt-get update -qq && \
     yarn && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-# Set production environment variables
+# Configura variáveis de ambiente para produção
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development test"
 
-# Throw-away build stage to reduce size of final image
+# Build intermediário para instalar dependências e assets
 FROM base AS build
 
-# Install build tools and dependencies for gems
+# Instala ferramentas de compilação e dependências para gems
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     build-essential \
@@ -36,41 +36,35 @@ RUN apt-get update -qq && \
     pkg-config && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-# Copy gem files and install dependencies
+# Copia Gemfile e instala gems
 COPY Gemfile Gemfile.lock ./ 
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
-# Copy the application code
+# Copia o código da aplicação
 COPY . .
 
-# Adjust bin files to be executable on Linux
+# Torna os arquivos bin executáveis
 RUN chmod +x bin/* && \
     sed -i "s/\r$//g" bin/* && \
     sed -i 's/ruby\.exe$/ruby/' bin/*
 
-# Precompiling assets for production with a dummy secret key
+# Precompila assets
 RUN SECRET_KEY_BASE=DUMMY bundle exec rake assets:precompile
 
-# Final stage: runtime image
+# Imagem final para execução
 FROM base
 
-# Copy built artifacts: gems, application code
+# Copia os artefatos construídos
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-# Create a non-root user for security
+# Cria um usuário não-root para segurança
 RUN groupadd --system --gid 1000 rails && \
     useradd --uid 1000 --gid 1000 --create-home --shell /bin/bash rails && \
     chown -R rails:rails db log storage tmp
 
 USER 1000:1000
 
-# Entrypoint prepares the database
-ENTRYPOINT ["./bin/rails"]
-
-# Expose the default Rails port
-EXPOSE 3000
-
-# Default command to start the server
-CMD ["server", "-b", "0.0.0.0"]
+# Executa migrações antes de iniciar o servidor
+CMD ["sh", "-c", "bundle exec rake db:migrate && bundle exec rails server -b 0.0.0.0"]
