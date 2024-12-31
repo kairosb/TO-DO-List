@@ -2,9 +2,9 @@
 
 # Define the Ruby version (ensure it matches your .ruby-version)
 ARG RUBY_VERSION=3.3.6
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+FROM ruby:$RUBY_VERSION-slim AS base
 
-# Rails app lives here
+# Define the working directory for the Rails application
 WORKDIR /rails
 
 # Install essential runtime packages
@@ -14,7 +14,8 @@ RUN apt-get update -qq && \
     libjemalloc2 \
     libvips \
     postgresql-client \
-    nodejs && \
+    nodejs \
+    yarn && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Set production environment variables
@@ -40,10 +41,10 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
-# Copy application code
+# Copy the application code
 COPY . .
 
-# Adjust binfiles to be executable on Linux
+# Adjust bin files to be executable on Linux
 RUN chmod +x bin/* && \
     sed -i "s/\r$//g" bin/* && \
     sed -i 's/ruby\.exe$/ruby/' bin/*
@@ -58,7 +59,7 @@ FROM base
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
 
-# Create non-root user for security
+# Create a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
     useradd --uid 1000 --gid 1000 --create-home --shell /bin/bash rails && \
     chown -R rails:rails db log storage tmp
@@ -66,10 +67,10 @@ RUN groupadd --system --gid 1000 rails && \
 USER 1000:1000
 
 # Entrypoint prepares the database
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+ENTRYPOINT ["./bin/rails"]
 
 # Expose the default Rails port
 EXPOSE 3000
 
 # Default command to start the server
-CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
+CMD ["server", "-b", "0.0.0.0"]
