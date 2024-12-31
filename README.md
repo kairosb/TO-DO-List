@@ -8,6 +8,9 @@ O **To-Do List** é um aplicativo desenvolvido para ajudar os usuários a organi
 
 - **Gestão de Listas:** Criação, edição e exclusão de listas de tarefas personalizadas.
 - **Quadros (Boards):** Organização de tarefas em colunas como "To Do", "In Progress" e "Done".
+  - Cada Lista tem um Quadro.
+  - O usuário pode criar um Quadro baseado na quantidade de horas que ele determina no Quadro. Podendo ser usado para organizar melhor seu dia.
+    -O Quadro busca as tasks de maior prioridade e vai contabilizando as horas da task alocando o máximo possível no board mas nunca ultrapassando a quantidade de horas que o usuário estipulou.
 - **Tarefas:**
   - Adição, edição e exclusão de tarefas.
   - Marcação de tarefas como concluídas.
