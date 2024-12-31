@@ -32,7 +32,7 @@
                     <%= task.description.presence || "Sem descrição" %>
                   </p>
                   <% if task.due_date.present? %>
-                    <p class="text-muted small mb-2">
+                    <p class="text-white small mb-2">
                       <i class="fas fa-calendar-alt"></i> Vence em: <%= l(task.due_date) %>
                     </p>
                   <% end %>
