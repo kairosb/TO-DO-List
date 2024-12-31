@@ -48,16 +48,18 @@
                         <button type="submit" class="nav-link text-danger border-0 bg-transparent">Sair</button>
                         <% end %>
                     </li>
+                    <li class="nav-item">
+                        <%= form_with url: search_path, method: :get, class: "d-flex", local: true do |f| %>
+                        <%= f.text_field :query, class: "form-control me-2", placeholder: "Pesquisar...", aria: { label: "Search" } %>
+                        <%= f.submit "Buscar", class: "btn btn-outline-light" %>
+                        <% end %>
+                    </li>
                     <% else %>
                     <li class="nav-item">
                         <a class="nav-link <%= current_page?('/users/sign_in') ? 'active' : '' %>" href="/users/sign_in">Entrar</a>
                     </li>
                     <% end %>
                 </ul>
-                <%= form_with url: search_path, method: :get, class: "d-flex", local: true do |f| %>
-                <%= f.text_field :query, class: "form-control me-2", placeholder: "Pesquisar...", aria: { label: "Search" } %>
-                <%= f.submit "Buscar", class: "btn btn-outline-light" %>
-                <% end %>
             </div>
         </div>
     </nav>

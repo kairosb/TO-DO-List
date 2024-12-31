@@ -14,12 +14,15 @@
                     <% column.task_assignments.each do |assignment| %>
                     <% task = assignment.task %>
                     <% priority_class = case task.priority.level
-                when 1 then 'bg-danger text-white' 
-                when 2 then 'bg-warning text-dark' 
-                when 3 then 'bg-success text-white' 
-              end %>
+                        when 1 then 'bg-danger text-white' 
+                        when 2 then 'bg-warning text-dark' 
+                        when 3 then 'bg-success text-white' 
+                    end %>
 
-                    <div class="card mb-2 draggable-task shadow-sm <%= !task.completed? && task.due_date.present? && task.due_date&.to_date >= Date.current ? 'card-due-date text-white' : '' %>" data-task-assignment-id="<%= assignment.id %>">
+                    <% overdue_class = task.due_date.present? && task.due_date <= Date.current ? 'border-danger' : '' %>
+                    <% date_class = task.due_date.present? && task.due_date <= Date.current ? 'text-danger' : 'text-white' %>
+
+                    <div class="card mb-2 draggable-task shadow-sm <%= overdue_class %>" data-task-assignment-id="<%= assignment.id %>">
                         <div class="card-body p-2">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="card-title text-muted text-truncate text-white">
@@ -33,7 +36,7 @@
                                 <%= task.description.presence || "Sem descrição" %>
                             </p>
                             <% if task.due_date.present? %>
-                            <p class="text-end text-muted mb-2 text-truncate text-white">
+                            <p class="text-end mb-2 text-truncate <%= date_class %>">
                                 Vence em: <%= l(task.due_date) %>
                             </p>
                             <% end %>

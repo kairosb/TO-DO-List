@@ -1,77 +1,70 @@
 <div class="container mt-5">
-  <h2 class="text-center py-3 text-white">Detalhes da Tarefa</h2>
+    <h2 class="text-center py-3 text-white">Detalhes da Tarefa</h2>
 
-  <div class="card bg-dark text-light shadow-sm">
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-      <h3 class="m-0"><i class="fas fa-tasks me-2"></i><%= @task.title %></h3>
-      <% if @task.completed %>
-        <span class="badge bg-success"><i class="fas fa-check-circle"></i> Concluído</span>
-      <% else %>
-        <span class="badge bg-warning text-dark"><i class="fas fa-hourglass-half"></i> Pendente</span>
-      <% end %>
-    </div>
-    <div class="card-body">
-      <div class="mb-3">
-        <p><strong><i class="fas fa-list-ul me-2"></i> Lista Associada:</strong> <%= @todo_list.name %></p>
-      </div>
-      <div class="mb-3">
-        <p><strong><i class="fas fa-align-left me-2"></i> Descrição:</strong> <%= @task.description.presence || "Sem descrição" %></p>
-      </div>
-      <div class="mb-3">
-        <p>
-          <strong><i class="fas fa-exclamation-circle me-2"></i> Prioridade:</strong>
-          <span class="badge <%= case @task.priority.level
+    <div class="card bg-dark text-light shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="m-0"><i class="fas fa-tasks me-2"></i><%= @task.title %></h3>
+            <% if @task.completed %>
+            <span class="badge bg-success"><i class="fas fa-check-circle"></i> Concluído</span>
+            <% else %>
+            <span class="badge bg-warning text-dark"><i class="fas fa-hourglass-half"></i> Pendente</span>
+            <% end %>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <p><strong><i class="fas fa-list-ul me-2"></i> Lista Associada:</strong> <%= @todo_list.name %></p>
+            </div>
+            <div class="mb-3">
+                <p><strong><i class="fas fa-align-left me-2"></i> Descrição:</strong> <%= @task.description.presence || "Sem descrição" %></p>
+            </div>
+            <div class="mb-3">
+                <p>
+                    <strong><i class="fas fa-exclamation-circle me-2"></i> Prioridade:</strong>
+                    <span class="badge <%= case @task.priority.level
             when 1 then 'bg-danger text-white'
             when 2 then 'bg-warning text-dark'
             when 3 then 'bg-success text-white'
           end %>">
-            <%= @task.priority.name %>
-          </span>
-        </p>
-      </div>
-      <div class="mb-3">
-        <p><strong><i class="fas fa-clock me-2"></i> Tempo Estimado:</strong> <%= @task.estimate || "Não especificado" %> horas</p>
-      </div>
-      <% if @task.due_date.present? %>
-        <div class="mb-3">
-          <p>
-            <strong><i class="fas fa-calendar-alt me-2"></i> Data de Vencimento:</strong>
-            <span class="<%= if @task.due_date.to_date < Date.current
-                              'text-danger' 
-                            elsif @task.due_date.to_date == Date.current
-                              'text-warning' 
+                        <%= @task.priority.name %>
+                    </span>
+                </p>
+            </div>
+            <div class="mb-3">
+                <p><strong><i class="fas fa-clock me-2"></i> Tempo Estimado:</strong> <%= @task.estimate || "Não especificado" %> horas</p>
+            </div>
+            <% if @task.due_date.present? %>
+            <div class="mb-3">
+                <p>
+                    <strong><i class="fas fa-calendar-alt me-2"></i> Data de Vencimento:</strong>
+                    <span class="<%= if @task.due_date.to_date <= Date.current
+                              'text-danger'
                             else
                               'text-success' 
                             end %>">
-              <%= l(@task.due_date) %>
-              <% if @task.due_date.to_date < Date.current %>
-                <i class="fas fa-exclamation-circle"></i> (Vencida)
-              <% elsif @task.due_date.to_date == Date.current %>
-                <i class="fas fa-exclamation-triangle"></i> (Vence hoje)
-              <% end %>
-            </span>
-          </p>
+                        <%= l(@task.due_date) %>
+                    </span>
+                </p>
+            </div>
+            <% else %>
+            <div class="mb-3">
+                <p><strong><i class="fas fa-calendar-alt me-2"></i> Data de Vencimento:</strong> Não especificada</p>
+            </div>
+            <% end %>
         </div>
-      <% else %>
-        <div class="mb-3">
-          <p><strong><i class="fas fa-calendar-alt me-2"></i> Data de Vencimento:</strong> Não especificada</p>
+        <div class="card-footer bg-secondary d-flex justify-content-between align-items-center">
+            <div>
+                <%= link_to edit_todo_list_task_path(@todo_list, @task), class: 'btn btn-sm btn-outline-light me-2' do %>
+                <i class="fas fa-edit"></i> Editar
+                <% end %>
+                <%= form_with url: todo_list_task_path(@todo_list, @task), method: :delete, data: { confirm: 'Tem certeza que deseja excluir esta tarefa?' }, class: 'd-inline' do %>
+                <button type="submit" class="btn btn-sm btn-danger">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+                <% end %>
+            </div>
+            <%= link_to todo_list_tasks_path(@todo_list), class: 'btn btn-sm btn-outline-light' do %>
+            <i class="fas fa-arrow-left"></i> Voltar para Tarefas
+            <% end %>
         </div>
-      <% end %>
     </div>
-    <div class="card-footer bg-secondary d-flex justify-content-between align-items-center">
-      <div>
-        <%= link_to edit_todo_list_task_path(@todo_list, @task), class: 'btn btn-sm btn-outline-light me-2' do %>
-          <i class="fas fa-edit"></i> Editar
-        <% end %>
-        <%= form_with url: todo_list_task_path(@todo_list, @task), method: :delete, data: { confirm: 'Tem certeza que deseja excluir esta tarefa?' }, class: 'd-inline' do %>
-          <button type="submit" class="btn btn-sm btn-danger">
-            <i class="fas fa-trash"></i> Excluir
-          </button>
-        <% end %>
-      </div>
-      <%= link_to todo_list_tasks_path(@todo_list), class: 'btn btn-sm btn-outline-light' do %>
-        <i class="fas fa-arrow-left"></i> Voltar para Tarefas
-      <% end %>
-    </div>
-  </div>
 </div>
